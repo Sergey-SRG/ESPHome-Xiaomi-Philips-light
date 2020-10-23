@@ -1,0 +1,31 @@
+substitutions:
+  hostname: 'xiamilight'
+esphome:
+  name: $hostname
+  platform: ESP8266
+  board: esp_wroom_02
+  board_flash_mode: dout
+  includes: 
+    - xiaomi_light.h
+
+<<: !include .forall.yaml
+
+output:
+  - platform: esp8266_pwm
+    pin: GPIO12
+    id: out_cw
+  - platform: esp8266_pwm
+    pin: GPIO15
+    id: out_b
+
+
+light:
+  - platform: custom 
+    lambda: |- 
+      auto light_out = new XiaomiLight(id(out_cw),id(out_b)); 
+      App.register_component(light_out); 
+      return {light_out}; 
+    lights: 
+      - name: $hostname smart light bulb
+        gamma_correct: 0
+#        default_transition_length: 0s
