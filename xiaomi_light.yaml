@@ -1,5 +1,5 @@
 substitutions:
-  hostname: 'xiamilight'
+  hostname: 'xiaomilight'
 esphome:
   name: $hostname
   platform: ESP8266
@@ -8,7 +8,21 @@ esphome:
   includes: 
     - xiaomi_light.h
 
-<<: !include .forall.yaml
+web_server:
+  port: 80
+wifi:
+  domain: '.lan'
+  networks:
+  - ssid: <name wifi>
+    password: <pass>
+
+logger:
+  level: DEBUG
+  esp8266_store_log_strings_in_flash: False
+
+api:
+
+ota:
 
 output:
   - platform: esp8266_pwm
@@ -26,6 +40,5 @@ light:
       App.register_component(light_out); 
       return {light_out}; 
     lights: 
-      - name: $hostname smart light bulb
+      - name: $hostname smart light
         gamma_correct: 0
-#        default_transition_length: 0s
