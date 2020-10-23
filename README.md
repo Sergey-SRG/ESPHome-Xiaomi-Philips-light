@@ -1,6 +1,6 @@
 # ESPHome-Xiaomi-Philips-light
 
-Suport xiaomi philips light in [ESPHome](https://github.com/esphome/esphome) for [Home Assistant](https://github.com/home-assistant/core).
+Support xiaomi philips light with [ESPHome](https://esphome.io/) for [Home Assistant](https://www.home-assistant.io/).
 
 ## Xiaomi Philips Smart LED Ball Lamp
 ![](/image/xiaomi-philips-smart.jpg)
