@@ -4,13 +4,12 @@
 
 class XiaomiLight : public Component, public LightOutput {
  public:
-  XiaomiLight(FloatOutput *cw_white_color, FloatOutput *brightness)
+  XiaomiLight(FloatOutput *cold_white, FloatOutput *brightness)
     {
-        cw_white_color_ = cw_white_color;
+        cold_white_ = cold_white;
         brightness_ = brightness;
-        cold_white_temperature_ = 175;
-        warm_white_temperature_ = 333;
-        constant_brightness_ = true;
+        color_temperature_cw_ = 175;
+        color_temperature_ww_ = 333;
     }
   LightTraits get_traits() override {
     auto traits = light::LightTraits();
@@ -18,25 +17,25 @@ class XiaomiLight : public Component, public LightOutput {
     traits.set_supports_rgb(false);
     traits.set_supports_rgb_white_value(false);
     traits.set_supports_color_temperature(true);
-    traits.set_min_mireds(this->cold_white_temperature_);
-    traits.set_max_mireds(this->warm_white_temperature_);
+    traits.set_min_mireds(this->color_temperature_cw_);
+    traits.set_max_mireds(this->color_temperature_ww_);
     return traits;
   }
 
   void write_state(LightState *state) override {
-    float brightness, cwhite, wwhite;
-    state->current_values_as_cwww(&cwhite, &wwhite, this->constant_brightness_);
-//    ESP_LOGD("custom", "The value cwhite: %f", cwhite);
-//    ESP_LOGD("custom", "The value wwhite: %f", wwhite);
+    float brightness;
+    const float color_temp = clamp(state->current_values.get_color_temperature(), this->color_temperature_cw_, this->color_temperature_ww_);
+    const float cw_fraction = 1.0f - (color_temp - color_temperature_cw_) / (color_temperature_ww_ - color_temperature_cw_);
     state->current_values_as_brightness(&brightness);
-//    ESP_LOGD("custom", "The value brightness: %f", brightness);
-    this->cw_white_color_->set_level(cwhite+(1-brightness));
+
+    ESP_LOGD("custom", "Brightness: %f", brightness);
+    ESP_LOGD("custom", "Cold white fraction: %f", cw_fraction);
+    this->cold_white_->set_level(cw_fraction);
     this->brightness_->set_level(brightness);
   }
   protected:
-    FloatOutput *cw_white_color_;
+    FloatOutput *cold_white_;
     FloatOutput *brightness_;
-    float cold_white_temperature_;
-    float warm_white_temperature_;
-    bool constant_brightness_;
+    float color_temperature_cw_;
+    float color_temperature_ww_;
 };
