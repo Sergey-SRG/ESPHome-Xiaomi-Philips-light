@@ -13,10 +13,7 @@ class XiaomiLight : public Component, public LightOutput {
     }
   LightTraits get_traits() override {
     auto traits = light::LightTraits();
-    traits.set_supports_brightness(true);
-    traits.set_supports_rgb(false);
-    traits.set_supports_rgb_white_value(false);
-    traits.set_supports_color_temperature(true);
+    traits.set_supported_color_modes({light::ColorMode::BRIGHTNESS, light::ColorMode::COLOR_TEMPERATURE});
     traits.set_min_mireds(this->color_temperature_cw_);
     traits.set_max_mireds(this->color_temperature_ww_);
     return traits;
