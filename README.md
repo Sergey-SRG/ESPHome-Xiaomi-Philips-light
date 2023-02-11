@@ -5,5 +5,3 @@ Support xiaomi philips light with [ESPHome](https://esphome.io/) for [Home Assis
 ## Xiaomi Philips Smart LED Ball Lamp
 ![](/image/xiaomi-philips-smart.jpg)
 
-## Xiaomi Philips Zhirui Light
-![](/image/xiaomi-philips-smart-2.jpg)
